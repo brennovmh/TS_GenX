@@ -16,17 +16,17 @@ st.title("Análise de Expressão Diferencial")
 st.sidebar.subheader("Selecione um gene")
 
 # Corrigir o nome da variável para 'selected_gene'
-selected_gene = st.sidebar.selectbox("Selecione um gene:", df['Name'].unique())
+selected_gene = st.sidebar.selectbox("Selecione um gene:", df['gene_symbol'].unique())
 
 # Filtrar o DataFrame com base no gene selecionado
-selected_gene_df = df[df['Name'] == selected_gene]
+selected_gene_df = df[df['gene_symbol'] == selected_gene]
 
 # Criar caixas de seleção para escolher amostras
 selected_samples = st.multiselect("Escolha as amostras:", selected_gene_df.columns[1:])
 
 if selected_samples:
     # Filtrar o DataFrame com base nas amostras selecionadas
-    filtered_df = selected_gene_df[['Name'] + selected_samples].melt(id_vars='Name', var_name='Amostras', value_name='Log2-TPM')
+    filtered_df = selected_gene_df[['gene_symbol'] + selected_samples].melt(id_vars='gene_symbol', var_name='Amostras', value_name='Log2-TPM')
 
     # Tratar valores não numéricos ou vazios antes da conversão
     filtered_df['Log2-TPM'] = pd.to_numeric(filtered_df['Log2-TPM'].str.replace(',', '.'), errors='coerce')
@@ -57,3 +57,4 @@ if selected_samples:
     st.plotly_chart(fig)
 else:
     st.warning("Selecione ao menos uma amostra para visualizar os dados.")
+
